@@ -41,15 +41,19 @@ command(LCD_2ndline)
 writeLCD("World!!")
 
 time.sleep(5)
-command(clear)
-writeLCD("RX[MB]=")
+
 
 while True:
-    command(LCD_2ndline)
-    res = subprocess.check_output("cat /proc/net/dev | grep eth1 | awk '{print $2/1024/1024}'",shell=True)
+    command(clear)
+
+    res = subprocess.check_output("cat /sys/class/thermal/thermal_zone0/temp | awk '{print $1/1000}'", shell=True) 
     res = res.decode()
     writeLCD(res)
 
+    command(LCD_2ndline)
 
-    time.sleep(1)
-    #command(clear)
+    res = subprocess.check_output("cat /proc/net/dev | grep eth1 | awk '{print $2/1024/1024}'", shell=True)
+    res = res.decode()
+    writeLCD(res)
+
+    time.sleep(5)
